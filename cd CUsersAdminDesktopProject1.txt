@@ -1,0 +1,3 @@
+cd C:\Users\Admin\Desktop\Project1
+conda activate documind
+cd C:\Users\Admin\Desktop\Project1
