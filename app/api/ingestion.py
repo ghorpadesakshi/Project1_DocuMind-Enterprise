@@ -19,6 +19,11 @@ pc = Pinecone(api_key=PINECONE_API_KEY)
 index = pc.Index(INDEX_NAME)
 
 
+def clear_old_vectors():
+    print("🧹 Clearing old vectors from Pinecone...")
+    index.delete(delete_all=True)
+
+
 def chunk_text(text, chunk_size=500):
     words = text.split()
     chunks = []
@@ -32,19 +37,29 @@ def chunk_text(text, chunk_size=500):
 
 async def ingest_document(file):
 
+    # 🔴 Delete previous document vectors
+    clear_old_vectors()
+
     # Save uploaded PDF
-    with tempfile.NamedTemporaryFile(delete=False) as tmp:
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
         content = await file.read()
         tmp.write(content)
         tmp_path = tmp.name
 
+    # Read PDF
     reader = PdfReader(tmp_path)
 
     text = ""
     for page in reader.pages:
-        text += page.extract_text() + "\n"
+        page_text = page.extract_text()
+        if page_text:
+            text += page_text + "\n"
 
+    # Split into chunks
     chunks = chunk_text(text)
+
+    if len(chunks) == 0:
+        return "No readable text found in document"
 
     # Create embeddings
     embeddings = client.embeddings.create(
@@ -63,5 +78,7 @@ async def ingest_document(file):
 
     # Store in Pinecone
     index.upsert(vectors=vectors)
+
+    print("✅ Document stored in Pinecone")
 
     return "Document successfully stored in Pinecone"
