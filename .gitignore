@@ -20,3 +20,7 @@ Thumbs.db
 
 # Vector DB / Index
 vectorstore/
+
+# Uploaded files (optional if using runtime uploads)
+uploads/
+uploaded_files/

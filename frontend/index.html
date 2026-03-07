@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DocuMind AI</title>
+    <link rel="stylesheet" href="/frontend/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📄 DocuMind AI</h1>
+    <p class="tagline">Upload a document and chat with it instantly</p>
+
+    <div class="upload-box">
+        <input type="file" id="fileInput">
+        <button onclick="uploadPDF()">Upload PDF</button>
+    </div>
+
+    <div class="chat-box" id="chatBox"></div>
+
+    <div class="input-box">
+        <input type="text" id="question" placeholder="Ask something about the document...">
+        <button onclick="askQuestion()">Send</button>
+    </div>
+
+</div>
+
+<script src="/frontend/script.js?v=2"></script>
+
+</body>
+</html>
